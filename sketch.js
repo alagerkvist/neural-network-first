@@ -100,7 +100,7 @@ function setup() {
   //inputLayer.train(data.input, data.label, outputLayer);
   //}
   let hidden = {
-    neuronInLayer: [64, 64],
+    neuronInLayer: [64, 32],
     layerCount: 2
   }
   nn = new NeuralNetwork(784, hidden, 10);
@@ -184,11 +184,13 @@ function draw() {
           }
         }
         //noLoop();
+        /*
         if (epoch == 30) {
           console.log("DONE");
           saveJSON(nn.serialize(), 'nn.json');
           noLoop();
         }
+        */
         train_index = 0;
       }
     }
