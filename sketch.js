@@ -19,7 +19,10 @@ let inputs = {
 }
 let inputLayer;
 
-
+/*
+Idea and loadMNIST is from
+https://github.com/CodingTrain/Toy-Neural-Network-JS
+*/
 function loadMNIST(callback) {
   let mnist = {};
   let files = {
