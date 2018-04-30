@@ -103,8 +103,8 @@ function setup() {
   //inputLayer.train(data.input, data.label, outputLayer);
   //}
   let hidden = {
-    neuronInLayer: [64, 32],
-    layerCount: 2
+    neuronInLayer: [64],
+    layerCount: 1
   }
   nn = new NeuralNetwork(784, hidden, 10);
   console.log("Done");

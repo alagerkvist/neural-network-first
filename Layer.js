@@ -8,6 +8,7 @@ class Layer {
     this.nextLayer = null;
     this.prevLayer = null;
     this.nextInputs = [];
+    this.learningRate = 0.05;
   }
 
   setNextLayer(layer) {
@@ -57,13 +58,13 @@ class Layer {
         //derSig.push(derSigmoid(output[i]) * error);
         for (let j = 0; j < this.neurons[i].weights.length; j++) {
           let outputFromPrev = this.prevLayer.nextInputs[j];
-          let delta = outputFromPrev * derSig[i] * -0.1;
+          let delta = outputFromPrev * derSig[i] * -this.learningRate;
           //console.log(this.neurons[i].weights[j]);
           this.neurons[i].weights[j] += delta;
           //console.log(this.neurons[i].weights[j]);
           //console.log(delta);
         }
-        this.neurons[i].bias += tot * -0.1;
+        this.neurons[i].bias += tot * -this.learningRate;
       }
       this.prevLayer.backProp(derSig);
     } else if (this.type == "Hidden") {
@@ -82,11 +83,11 @@ class Layer {
         }
         for (let j = 0; j < this.neurons[i].weights.length; j++) {
           let outputFromPrev = this.prevLayer.nextInputs[j];
-          let delta = outputFromPrev * sum * derSig * -0.1;
+          let delta = outputFromPrev * sum * derSig * -this.learningRate;
           backOut.push(sum * derSig);
           this.neurons[i].weights[j] += delta;
         }
-        this.neurons[i].bias += derSig * sum * -0.1;
+        this.neurons[i].bias += derSig * sum * -this.learningRate;
       }
       if (this.prevLayer.type == "Hidden") {
         this.prevLayer.backProp(backOut);
