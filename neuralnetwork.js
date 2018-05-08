@@ -5,7 +5,8 @@ class NeuralNetwork {
     this.inputLayer = new Layer("Input", numOfInputs);
     //inputLayer = new Layer("Input", 784);
     let currentLayer = this.inputLayer;
-    for (let i = 0; i < hiddenLayer.layerCount; i++) {
+    console.log(hiddenLayer.neuronInLayer.length);
+    for (let i = 0; i < hiddenLayer.neuronInLayer.length; i++) {
       let layer = new Layer("Hidden", hiddenLayer.neuronInLayer[i]);
       layer.setPrevLayer(currentLayer);
       currentLayer.setNextLayer(layer);

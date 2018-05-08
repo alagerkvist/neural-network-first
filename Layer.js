@@ -8,7 +8,7 @@ class Layer {
     this.nextLayer = null;
     this.prevLayer = null;
     this.nextInputs = [];
-    this.learningRate = 0.05;
+    this.learningRate = 0.1;
   }
 
   setNextLayer(layer) {
@@ -97,6 +97,11 @@ class Layer {
 
   train(inputs, label, outputLayer) {
     let output = this.feedFowrard(inputs);
+
+    if (findMax(output) == findMax(label)) {
+      trainRight++;
+      //console.log(this);
+    }
     //console.log("Error: " + output);
     //Switch to outputLayer
     outputLayer.backProp(output, label);

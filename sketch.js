@@ -70,55 +70,32 @@ async function loadFile(file) {
 let mnist;
 let outputLayer;
 let nn;
+let trainPoints = [];
+let testPoints = [];
 
 function setup() {
-  createCanvas(600, 600);
+  createCanvas(1220, 600);
   background(153);
-  line(0, 0, width, height);
-  line(1, 1, 10, 10);
-  angleMode(DEGREES);
-  // put setup code here
-  // console.log(inputs);
-  /*
-  inputLayer = new Layer("Input", 784);
-  let prevLayer = inputLayer;
-  let nextLayer = inputLayer;
-  let currentLayer = inputLayer;
-  for (let i = 0; i < 2; i++) {
-    let layer = new Layer("Hidden", 64);
-    layer.setPrevLayer(currentLayer);
-    currentLayer.setNextLayer(layer);
-    currentLayer = layer;
+  noStroke();
+  fill(255);
+  textSize(12);
+  for (let i = 0; i < width; i++) {
+    text(i, i * 20, height);
   }
-  outputLayer = new Layer("Output", 10);
-  outputLayer.setPrevLayer(currentLayer);
-  currentLayer.setNextLayer(outputLayer);
-  */
-  //for (let i = 0; i < 1; i++) {
-  //console.log(inputLayer);
+  for (let i = 0; i < 0.5; i += 0.01) {
+    if (i == 0) {
+      text(nf(i, 1, 0), 0, height - (i * 1200));
+    } else {
+      text(nf(i, 1, 2), 0, height - (i * 1200));
+    }
 
-  //let data = random(inputs.data);
-  //let data = inputs.data[1];
-  //console.log(data.input + " " + data.label);
-  //inputLayer.train(data.input, data.label, outputLayer);
-  //}
+  }
   let hidden = {
-    neuronInLayer: [64],
-    layerCount: 1
+    neuronInLayer: [64]
   }
   nn = new NeuralNetwork(784, hidden, 10);
   console.log("Done");
-  //for (let i = 0; i < 10; i++) {
-  //console.log(inputLayer);
 
-  //let data = random(inputs.data);
-  //let data = inputs.data[1];
-  //console.log(data.input + " " + data.label);
-  //nn.trainNetwork(data.input, data.label);
-  //}
-  //let t = inputLayer.feedFowrard(inputs.data[0].input);
-  //console.log(inputLayer.feedFowrard(inputs.data[0].input))
-  //console.log(t);
   loadMNIST(function(data) {
     mnist = data;
     console.log(mnist);
@@ -131,6 +108,7 @@ let inputsTrain = [];
 let testInputs = [];
 let train_index = 0;
 let epoch = 0;
+let trainRight = 0;
 
 function findMax(arr) {
   let highest = arr[0];
@@ -154,20 +132,17 @@ function draw() {
       let label = mnist.train_labels[train_index];
       let targets = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       targets[label] = 1;
-
-      // console.log(inputs);
-      // console.log(targets);
-
-      //console.log(train_index);
       nn.trainNetwork(inputsTrain, targets);
-      //inputLayer.train(inputsTrain, targets, outputLayer);
-      //nn.train(inputs, targets);
-      //console.log(train_index);
+
       train_index = (train_index + 1);
       //if (train_index == 100) {
       if (train_index >= mnist.train_labels.length) {
+        let percentTrain = trainRight / mnist.train_labels.length;
+        percentTrain = 1 - percentTrain;
+        trainRight = 0;
+        console.log(percentTrain);
         console.log("EPOCH... " + epoch + " & testing");
-        epoch++;
+
         let sumRight = 0;
         //mnist.test_labels.length
         for (let i = 0; i < mnist.test_labels.length; i++) {
@@ -183,21 +158,33 @@ function draw() {
           //console.log("Guess :" + findMax(guess));
           if (i % 1000 == 0 && i != 0) {
             //console.log(resp);
+            //console.log("Rest " + resp + " " + guess);
             console.log((sumRight / i) * 100 + "% Right");
           }
+
+
         }
-        //noLoop();
-        /*
-        if (epoch == 30) {
-          console.log("DONE");
-          saveJSON(nn.serialize(), 'nn.json');
-          noLoop();
+        translate(0, height);
+        strokeWeight(4);
+        stroke(255, 0, 0);
+
+        let trainPos = createVector(epoch * 20, -percentTrain * height * 2);
+        trainPoints.push(trainPos);
+        let testDataPercent = 1 - (sumRight / mnist.test_labels.length);
+        let testPos = createVector(epoch * 20, -testDataPercent * height * 2);
+        testPoints.push(testPos);
+        if (trainPoints.length == 1) {
+          point(trainPos.x, trainPos.y);
+          stroke(0, 0, 255);
+          point(testPos.x, testPos.y);
+        } else {
+          line(trainPoints[epoch - 1].x, trainPoints[epoch - 1].y, trainPos.x, trainPos.y);
+          stroke(0, 0, 255);
+          line(testPoints[epoch - 1].x, testPoints[epoch - 1].y, testPos.x, testPos.y);
         }
-        */
+        epoch++;
         train_index = 0;
       }
     }
   }
-
-  // put drawing code here
 }
