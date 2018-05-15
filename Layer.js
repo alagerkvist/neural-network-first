@@ -77,10 +77,9 @@ class Layer {
         let sum = 0;
 
         for (let j = 0; j < this.nextLayer.neurons.length; j++) {
-          for (let k = 0; k < this.nextLayer.neurons[j].weights.length; k++) {
-            sum += output[j] * this.nextLayer.neurons[j].weights[k];
-          }
+          sum += output[j] * this.nextLayer.neurons[j].weights[i];
         }
+
         for (let j = 0; j < this.neurons[i].weights.length; j++) {
           let outputFromPrev = this.prevLayer.nextInputs[j];
           let delta = outputFromPrev * sum * derSig * -this.learningRate;
