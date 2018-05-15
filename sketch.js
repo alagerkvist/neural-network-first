@@ -28,8 +28,8 @@ function loadMNIST(callback) {
   let files = {
     train_images: 'data/train-images-idx3-ubyte',
     train_labels: 'data/train-labels-idx1-ubyte',
-    test_images: 'data/t10k-images.idx3-ubyte',
-    test_labels: 'data/t10k-labels.idx1-ubyte'
+    test_images: 'data/t10k-images-idx3-ubyte',
+    test_labels: 'data/t10k-labels-idx1-ubyte'
   };
   return Promise.all(Object.keys(files).map(async file => {
       mnist[file] = await loadFile(files[file])
@@ -182,6 +182,8 @@ function draw() {
           stroke(0, 0, 255);
           line(testPoints[epoch - 1].x, testPoints[epoch - 1].y, testPos.x, testPos.y);
         }
+
+
         epoch++;
         train_index = 0;
       }
